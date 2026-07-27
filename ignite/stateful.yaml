@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ignite-cluster
+  namespace: ignite
+spec:
+  replicas: 2
+  serviceName: ignite-discovery-service
+  selector:
+    matchLabels:
+      app: ignite
+  template:
+    metadata:
+      labels:
+        app: ignite
+    spec:
+      serviceAccountName: ignite
+      terminationGracePeriodSeconds: 6000
+      tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "ignite"
+        effect: "NoSchedule"
+      containers:
+      - name: ignite-node
+        image: apacheignite/ignite:2.18.0
+        env:
+        - name: OPTION_LIBS
+          value: ignite-kubernetes,ignite-rest-http,ignite-json
+        - name: CONFIG_URI
+          value: file:///ignite/config/persistence.xml
+        - name: JVM_OPTS
+          value: "-DIGNITE_WAL_MMAP=false"
+        ports:
+        - containerPort: 47100
+        - containerPort: 47500
+        - containerPort: 49112
+        - containerPort: 10800
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: /ignite/config
+          name: config-vol
+        - mountPath: /ignite/work
+          name: work-vol
+        - mountPath: /ignite/wal
+          name: wal-vol
+        - mountPath: /ignite/walarchive
+          name: walarchive-vol
+      securityContext:
+        fsGroup: 2000
+      volumes:
+      - name: config-vol
+        configMap:
+          name: ignite-config
+  volumeClaimTemplates:
+    - metadata:
+        name: work-vol
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: "local-storage"
+        resources:
+          requests:
+            storage: "2Gi"
+    - metadata:
+        name: wal-vol
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: "local-storage"
+        resources:
+          requests:
+            storage: "2Gi"
+    - metadata:
+        name: walarchive-vol
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: "local-storage"
+        resources:
+          requests:
+            storage: "2Gi"

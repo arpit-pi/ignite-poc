@@ -15,5 +15,4 @@ spec:
       port: 10800
       targetPort: 10800
   selector:
-    labels:
       app: ignite
