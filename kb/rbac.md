@@ -1,0 +1,9 @@
+# RBAC for Ignite's Kubernetes pod discovery
+
+Ignite's `TcpDiscoveryKubernetesIpFinder` (enabled via the `ignite-kubernetes` module in `OPTION_LIBS`, configured in `ignite/config/persistence.xml`) discovers peer nodes by calling the Kubernetes API directly from inside the pod — `GET /api/v1/namespaces/<ns>/endpoints/<serviceName>` — using the pod's ServiceAccount token. This means discovery depends entirely on RBAC being correctly wired up; `ignite/rbac.yaml` defines the `ignite` ServiceAccount, a `Role` granting `get/list/watch` on `pods`/`endpoints`, and a `RoleBinding` tying them together. The StatefulSet pod spec must set `serviceAccountName: ignite` for any of this to apply.
+
+## A `RoleBinding` must be created in the same namespace as its `Role`
+
+A `Role` (as opposed to a `ClusterRole`) is namespace-scoped, and a `RoleBinding` referencing it only grants access within the `RoleBinding`'s **own** namespace. If the `RoleBinding`'s `metadata.namespace` is left unset, it's determined entirely by however you happen to apply the manifest — `kubectl apply -f rbac.yaml` (no `-n` flag) uses your kubectl context's current namespace, which may not be `ignite`. If that happens, the RoleBinding is created somewhere other than `ignite` and silently grants nothing to the `ignite` ServiceAccount there — Ignite then fails discovery with a `403` calling the Kubernetes API (`java.io.IOException: Server returned HTTP response code: 403`), even though the Role/RoleBinding manifests look correct on their face.
+
+Fix: always set `metadata.namespace: ignite` explicitly on the `RoleBinding` (and really any namespaced object) rather than relying on an implicit default from how it's applied. If you hit this, check `kubectl get rolebinding -A | grep ignite` — a stray RoleBinding in the wrong namespace (e.g. `default`) confirms this failure mode; it's harmless to leave but safe to delete once the corrected one is applied.

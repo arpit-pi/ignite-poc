@@ -6,10 +6,9 @@ metadata:
   labels:
     app: ignite
 spec:
-  type: None
+  clusterIP: None
   ports:
     - name: discovery
       port: 47500
   selector:
-    labels:
       app: ignite

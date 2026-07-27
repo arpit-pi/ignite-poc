@@ -10,6 +10,9 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
   storageClassName: local-storage
+  claimRef:
+    namespace: ignite
+    name: work-vol-ignite-cluster-0
   local:
     path: /data/ignite/work
   nodeAffinity:
@@ -37,6 +40,9 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
   storageClassName: local-storage
+  claimRef:
+    namespace: ignite
+    name: wal-vol-ignite-cluster-0
   local:
     path: /data/ignite/wal
   nodeAffinity:
@@ -64,6 +70,9 @@ spec:
   volumeMode: Filesystem
   persistentVolumeReclaimPolicy: Delete
   storageClassName: local-storage
+  claimRef:
+    namespace: ignite
+    name: walarchive-vol-ignite-cluster-0
   local:
     path: /data/ignite/walarchive
   nodeAffinity:
@@ -91,6 +100,9 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
   storageClassName: local-storage
+  claimRef:
+    namespace: ignite
+    name: work-vol-ignite-cluster-1
   local:
     path: /data/ignite/work
   nodeAffinity:
@@ -118,6 +130,9 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
   storageClassName: local-storage
+  claimRef:
+    namespace: ignite
+    name: wal-vol-ignite-cluster-1
   local:
     path: /data/ignite/wal
   nodeAffinity:
@@ -145,6 +160,9 @@ spec:
   volumeMode: Filesystem
   persistentVolumeReclaimPolicy: Delete
   storageClassName: local-storage
+  claimRef:
+    namespace: ignite
+    name: walarchive-vol-ignite-cluster-1
   local:
     path: /data/ignite/walarchive
   nodeAffinity:
