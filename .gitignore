@@ -1,0 +1,34 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Local env / secrets
+.env
+.env.*
+*.pem
+*.key
+kubeconfig
+kubeconfig*
+secrets.yaml
+secrets/
+
+# Terraform (in case IaC gets added later)
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Archives / backups
+*.tar
+*.tar.gz
+*.zip
+*.bak

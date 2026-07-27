@@ -1,0 +1,161 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ignite-work-vol-0
+spec:
+  capacity:
+    storage: 2Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage
+  local:
+    path: /data/ignite/work
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+          - key: workload
+            operator: In
+            values: 
+              - ignite-server
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+              - worker-node-1
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ignite-wal-vol-0
+spec:
+  capacity:
+    storage: 2Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage
+  local:
+    path: /data/ignite/wal
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: workload
+              operator: In
+              values:
+                - ignite-server
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - worker-node-1
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ignite-walarchive-vol-0
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage
+  local:
+    path: /data/ignite/walarchive
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: workload
+              operator: In
+              values:
+                - ignite-server
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - worker-node-1
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ignite-work-vol-1
+spec:
+  capacity:
+    storage: 2Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage
+  local:
+    path: /data/ignite/work
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+          - key: workload
+            operator: In
+            values: 
+              - ignite-server
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+              - worker-node-2
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ignite-wal-vol-1
+spec:
+  capacity:
+    storage: 2Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage
+  local:
+    path: /data/ignite/wal
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: workload
+              operator: In
+              values:
+                - ignite-server
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - worker-node-2
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ignite-walarchive-vol-1
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage
+  local:
+    path: /data/ignite/walarchive
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: workload
+              operator: In
+              values:
+                - ignite-server
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - worker-node-2
